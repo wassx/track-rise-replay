@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Slider } from "@/components/ui/slider";
 import { Card, CardContent } from "@/components/ui/card";
 import { toast } from "@/hooks/use-toast";
-import { TrackPoint, parseGPX, computeBounds, buildLineString, buildLineGradientExpression } from "@/utils/gpx";
+import { TrackPoint, computeBounds, buildLineString, buildLineGradientExpression } from "@/utils/gpx";
+import { parseIGC } from "@/utils/igc";
 
 const Index: React.FC = () => {
   const [token, setToken] = React.useState<string | undefined>(() => localStorage.getItem("mapboxToken") || undefined);
@@ -44,15 +45,15 @@ const Index: React.FC = () => {
     const onDrop = async (e: DragEvent) => {
       e.preventDefault();
       const file = e.dataTransfer?.files?.[0];
-      if (file && file.name.toLowerCase().endsWith(".gpx")) {
+      if (file && file.name.toLowerCase().endsWith(".igc")) {
         try {
-          const pts = await parseGPX(file);
+          const pts = await parseIGC(file);
           if (!pts.length) throw new Error("No track points found.");
           setPoints(pts);
           setCurrentIndex(0);
-          toast({ title: "GPX loaded", description: `${pts.length} points` });
+          toast({ title: "IGC loaded", description: `${pts.length} points` });
         } catch (err: any) {
-          toast({ title: "Failed to parse GPX", description: err?.message || String(err) });
+          toast({ title: "Failed to parse IGC", description: err?.message || String(err) });
         }
       }
     };
@@ -66,13 +67,13 @@ const Index: React.FC = () => {
 
   const onFile = async (file: File) => {
     try {
-      const pts = await parseGPX(file);
+      const pts = await parseIGC(file);
       if (!pts.length) throw new Error("No track points found.");
       setPoints(pts);
       setCurrentIndex(0);
-      toast({ title: "GPX loaded", description: `${pts.length} points` });
+      toast({ title: "IGC loaded", description: `${pts.length} points` });
     } catch (err: any) {
-      toast({ title: "Failed to parse GPX", description: err?.message || String(err) });
+      toast({ title: "Failed to parse IGC", description: err?.message || String(err) });
     }
   };
 

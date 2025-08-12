@@ -13,7 +13,7 @@ const GPXUploader: React.FC<Props> = ({ onFile }) => {
       <input
         ref={fileInputRef}
         type="file"
-        accept=".gpx,application/gpx+xml"
+        accept=".igc,.IGC"
         className="hidden"
         onChange={(e) => {
           const f = e.target.files?.[0];
@@ -21,9 +21,9 @@ const GPXUploader: React.FC<Props> = ({ onFile }) => {
         }}
       />
       <Button variant="hero" onClick={() => fileInputRef.current?.click()}>
-        Upload GPX
+        Upload IGC
       </Button>
-      <span className="text-sm text-muted-foreground">or drag & drop a .gpx file anywhere</span>
+      <span className="text-sm text-muted-foreground">or drag & drop an .igc file anywhere</span>
     </div>
   );
 };
