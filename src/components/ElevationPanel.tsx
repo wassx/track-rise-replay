@@ -11,10 +11,10 @@ const ElevationPanel: React.FC<Props> = ({ points, currentIndex, onScrub }) => {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const [dragging, setDragging] = useState(false);
 
-  const { pathD, marker, minEle, maxEle } = useMemo(() => {
+  const { pathD, marker, minEle, maxEle, curEle } = useMemo(() => {
     const w = 120;
     const h = 500; // base virtual height, will scale via CSS
-    if (!points.length) return { pathD: "", marker: { x: 0, y: 0 }, minEle: 0, maxEle: 0 };
+    if (!points.length) return { pathD: "", marker: { x: 0, y: 0 }, minEle: 0, maxEle: 0, curEle: 0 };
     const minEle = Math.min(...points.map((p) => p.ele));
     const maxEle = Math.max(...points.map((p) => p.ele));
     const xForEle = (ele: number) => {
@@ -34,7 +34,8 @@ const ElevationPanel: React.FC<Props> = ({ points, currentIndex, onScrub }) => {
     });
     const ci = Math.max(0, Math.min(points.length - 1, currentIndex));
     const marker = { x: xForEle(points[ci].ele), y: yForIdx(ci) };
-    return { pathD: d, marker, minEle, maxEle };
+    const curEle = points[ci].ele;
+    return { pathD: d, marker, minEle, maxEle, curEle };
   }, [points, currentIndex]);
 
   const handleScrub = (clientY: number) => {
@@ -58,7 +59,7 @@ const ElevationPanel: React.FC<Props> = ({ points, currentIndex, onScrub }) => {
       onMouseUp={() => setDragging(false)}
       onMouseLeave={() => setDragging(false)}
       role="img"
-      aria-label={`Elevation panel from ${Math.round(minEle)}m to ${Math.round(maxEle)}m`}
+      aria-label={`Elevation panel from ${Math.round(minEle)}m to ${Math.round(maxEle)}m, current ${Math.round(curEle)}m`}
     >
       <div className="absolute inset-0 rounded-lg bg-gradient-to-t from-[hsl(var(--elev-low))] via-[hsl(var(--elev-mid))] to-[hsl(var(--elev-high))] opacity-20" />
       <svg viewBox="0 0 120 500" preserveAspectRatio="none" className="absolute inset-2 h-[calc(100%-1rem)] w-[calc(100%-1rem)]">
@@ -69,9 +70,16 @@ const ElevationPanel: React.FC<Props> = ({ points, currentIndex, onScrub }) => {
             <stop offset="100%" stopColor="hsl(var(--elev-high))" />
           </linearGradient>
         </defs>
+        {/* Timeline guide at current point-in-time */}
+        <line x1={8} x2={112} y1={marker.y} y2={marker.y} stroke="hsl(var(--border))" strokeOpacity={0.5} strokeWidth={1} strokeDasharray="4 3" />
         <path d={pathD} stroke="url(#profileGradient)" strokeWidth={3} fill="none" />
         {/* Marker */}
         <circle cx={marker.x} cy={marker.y} r={6} fill="hsl(var(--brand-glow))" stroke="hsl(var(--brand))" strokeWidth={2} />
+        {/* Current height label */}
+        <g transform={`translate(${Math.min(92, marker.x + 8)}, ${Math.max(12, marker.y - 12)})`}>
+          <rect width={28 + String(Math.round(curEle)).length * 6} height={18} rx={4} fill="hsl(var(--background))" fillOpacity={0.85} stroke="hsl(var(--brand))" strokeOpacity={0.25} />
+          <text x={8} y={12} fontSize={10} fill="hsl(var(--foreground))">{`${Math.round(curEle)} m`}</text>
+        </g>
       </svg>
       {/* Scale labels */}
       <div className="absolute left-2 top-2 text-xs text-muted-foreground">
