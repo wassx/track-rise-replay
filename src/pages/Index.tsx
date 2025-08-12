@@ -139,14 +139,7 @@ const Index: React.FC = () => {
             </Card>
           </aside>
 
-          <div className="grid grid-rows-[1fr] lg:grid-cols-[140px_1fr] gap-6 min-h-[70vh]">
-            <div className="h-[60vh] lg:h-auto">
-              <ElevationPanel
-                points={points}
-                currentIndex={currentIndex}
-                onScrub={(i) => { setCurrentIndex(i); setPlaying(false); }}
-              />
-            </div>
+          <div className="grid grid-rows-[1fr_auto] gap-6 min-h-[70vh]">
             <div className="h-[60vh] lg:h-auto">
               {!token ? (
                 <div className="h-full w-full rounded-lg border border-dashed border-input flex items-center justify-center text-center text-muted-foreground">
@@ -161,6 +154,13 @@ const Index: React.FC = () => {
                   lineGradientExpr={gradientExpr as any}
                 />
               )}
+            </div>
+            <div className="h-[160px]">
+              <ElevationPanel
+                points={points}
+                currentIndex={currentIndex}
+                onScrub={(i) => { setCurrentIndex(i); setPlaying(false); }}
+              />
             </div>
           </div>
         </section>
