@@ -36,22 +36,32 @@ All colors MUST be HSL.
     --input: 214.3 31.8% 91.4%;
     --ring: 222.2 84% 4.9%;
 
-    --radius: 0.5rem;
+    --radius: 0.75rem;
 
+    /* Brand & gradients */
+    --brand: 250 84% 54%;
+    --brand-2: 280 76% 60%;
+    --brand-glow: 210 90% 60%;
+    --gradient-primary: linear-gradient(135deg, hsl(var(--brand)), hsl(var(--brand-2)) 60%, hsl(var(--brand-glow)));
+
+    /* Elevation gradient (low -> mid -> high) */
+    --elev-low: 210 90% 60%;
+    --elev-mid: 160 65% 45%;
+    --elev-high: 0 84% 60%;
+
+    /* Shadows & motion */
+    --shadow-elegant: 0 10px 30px -10px hsl(var(--brand) / 0.35);
+    --shadow-glow: 0 10px 40px -10px hsl(var(--brand-glow) / 0.45);
+    --transition-smooth: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+
+    /* Sidebar */
     --sidebar-background: 0 0% 98%;
-
     --sidebar-foreground: 240 5.3% 26.1%;
-
     --sidebar-primary: 240 5.9% 10%;
-
     --sidebar-primary-foreground: 0 0% 98%;
-
     --sidebar-accent: 240 4.8% 95.9%;
-
     --sidebar-accent-foreground: 240 5.9% 10%;
-
     --sidebar-border: 220 13% 91%;
-
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
